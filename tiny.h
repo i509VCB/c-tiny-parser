@@ -188,14 +188,6 @@ struct TinyCursor* create_cursor();
 enum TinyResult begin_read(TinyCursor* cursor, char* input);
 
 /**
- * Peeks forward in the tiny file, reading the file without moving the cursor's internal position.
- *
- * @param cursor the cursor to read with
- * @return the type of element in the tiny file that was detected
- */
-enum TinyElementType peek_forward(TinyCursor* cursor);
-
-/**
  * Gets the major version of a tiny file being read.
  *
  * @param cursor the cursor reading the file
@@ -211,7 +203,15 @@ unsigned int get_major_version(TinyCursor* cursor);
  */
 unsigned int get_minor_version(TinyCursor* cursor);
 
-// Element read methods
+// Element reading methods
+
+/**
+ * Peeks forward in the tiny file, reading the file without moving the cursor to the next element.
+ *
+ * @param cursor the cursor to read with
+ * @return the type of element in the tiny file that was detected
+ */
+enum TinyElementType peek_forward(TinyCursor* cursor);
 
 /**
  * Skips the next element in the tiny file.
