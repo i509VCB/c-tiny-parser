@@ -95,6 +95,9 @@ enum TinyResult {
     UNSUPPORTED_VERSION
 };
 
+/**
+ * Represents the result of reading an element from a tiny file.
+ */
 enum ReadElementResult {
     /**
      * Represents a result where the element being read was successfully read.
@@ -192,28 +195,108 @@ enum TinyResult begin_read(TinyCursor* cursor, char* input);
  */
 enum TinyElementType peek_forward(TinyCursor* cursor);
 
+/**
+ * Gets the major version of a tiny file being read.
+ *
+ * @param cursor the cursor reading the file
+ * @return the major version of the tiny file
+ */
 unsigned int get_major_version(TinyCursor* cursor);
 
+/**
+ * Gets the minor version of a tiny file being read.
+ *
+ * @param cursor the cursor reading the file
+ * @return the minor version of the tiny file
+ */
 unsigned int get_minor_version(TinyCursor* cursor);
 
 // Element read methods
 
+/**
+ * Skips the next element in the tiny file.
+ * This will also skip any child elements to the element being read.
+ * For example if a method element is skipped, all of the method's parameter mappings, comment and local variable
+ * mappings also get skipped.
+ *
+ * @param cursor the cursor reading the file
+ * @return the result of the operation
+ */
 enum ReadElementResult skip_element(TinyCursor* cursor);
 
+/**
+ * Reads the namespaces in the tiny file, moving the cursor to the next element after the operation is completed.
+ *
+ * @param cursor the cursor reading the file
+ * @param namespaces the pointer to use in order to obtain information about the tiny file's namespaces.
+ * @return the result of the operation
+ */
 enum ReadElementResult read_namespaces(TinyCursor* cursor, TinyNamespaces* namespaces);
 
+/**
+ * Reads a property in the tiny file, moving the cursor to the next element after the operation is completed.
+ * Some properties may influence how the tiny file is read.
+ * Special properties are documented in the tiny specification and are automatically accounted for in the parsing process.
+ * Otherwise a property may be used by the parser or user of the tiny file as desired.
+ *
+ * @param cursor the cursor reading the file
+ * @param property the pointer to use in order to obtain information about the property in the tiny file.
+ * @return the result of the operation
+ */
 enum ReadElementResult read_property(TinyCursor* cursor, TinyProperty* property);
 
+/**
+ * Reads a class definition in the tiny file, moving the cursor to the next element after the operation is completed.
+ *
+ * @param cursor the cursor reading the file
+ * @param class_ the pointer to use in order to obtain information about the tiny file's class definition
+ * @return the result of the operation
+ */
 enum ReadElementResult read_class_def(TinyCursor* cursor, TinyClassDef* class_);
 
+/**
+ * Reads a method definition in the tiny file, moving the cursor to the next element after the operation is completed.
+ *
+ * @param cursor the cursor reading the file
+ * @param method the pointer to use in order to obtain information about the tiny file's method definition
+ * @return the result of the operation
+ */
 enum ReadElementResult read_method_def(TinyCursor* cursor, TinyMethodDef* method);
 
+/**
+ * Reads a field definition in the tiny file, moving the cursor to the next element after the operation is completed.
+ *
+ * @param cursor the cursor reading the file
+ * @param field the pointer to use in order to obtain information about the tiny file's field definition
+ * @return the result of the operation
+ */
 enum ReadElementResult read_field_def(TinyCursor* cursor, TinyFieldDef* field);
 
+/**
+ * Reads a method parameter definition in the tiny file, moving the cursor to the next element after the operation is completed.
+ *
+ * @param cursor the cursor reading the file
+ * @param method_parameter the pointer to use in order to obtain information about the tiny file's method parameter definition
+ * @return the result of the operation
+ */
 enum ReadElementResult read_method_parameter_def(TinyCursor* cursor, TinyMethodParameterDef* method_parameter);
 
+/**
+ * Reads a local variable definition in the tiny file, moving the cursor to the next element after the operation is completed.
+ *
+ * @param cursor the cursor reading the file
+ * @param local_variable the pointer to use in order to obtain information about the tiny file's local variable definition
+ * @return the result of the operation
+ */
 enum ReadElementResult read_local_variable_def(TinyCursor* cursor, TinyLocalVariableDef* local_variable);
 
+/**
+ * Reads a comment belonging to an element in the tiny file, moving the cursor to the next element after the operation is completed.
+ *
+ * @param cursor the cursor reading the file
+ * @param comment the pointer to use in order to obtain information about the tiny file's comment definition
+ * @return the result of the operation
+ */
 enum ReadElementResult read_comment(TinyCursor* cursor, TinyCommentDef* comment);
 
 #endif //C_TINY_PARSER_TINY_H
