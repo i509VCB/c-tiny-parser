@@ -25,6 +25,46 @@
 typedef struct TinyCursor TinyCursor;
 
 /**
+ * A structure which contains the namespaces of a tiny file.
+ */
+typedef struct TinyNamespaces TinyNamespaces;
+
+/**
+ * A structure which contains a property key and value of a tiny file.
+ */
+typedef struct TinyProperty TinyProperty;
+
+/**
+ * A structure which contains class definitions by namespace for a tiny file.
+ */
+typedef struct TinyClassDef TinyClassDef;
+
+/**
+ * A structure which contains method definitions by namespace for a tiny file.
+ */
+typedef struct TinyMethodDef TinyMethodDef;
+
+/**
+ * A structure which contains field definitions by namespace for a tiny file.
+ */
+typedef struct TinyFieldDef TinyFieldDef;
+
+/**
+ * A structure which contains method parameter definitions by namespace for a tiny file.
+ */
+typedef struct TinyMethodParameterDef TinyMethodParameterDef;
+
+/**
+ * A structure which contains local variable definitions by namespace for a tiny file.
+ */
+typedef struct TinyLocalVariableDef TinyLocalVariableDef;
+
+/**
+ * A structure which contains a comment for an element in a tiny file.
+ */
+typedef struct TinyCommentDef TinyCommentDef;
+
+/**
  * Represents the result of an action related to reading a tiny file.
  */
 enum TinyResult {
@@ -53,6 +93,22 @@ enum TinyResult {
      * The major and minor version of the tiny file may be read still if this error is thrown.
      */
     UNSUPPORTED_VERSION
+};
+
+enum ReadElementResult {
+    /**
+     * Represents a result where the element being read was successfully read.
+     */
+    READ_SUCCESS,
+    /**
+     * Represents an error where the element being read was the wrong type.
+     * This occurs when the element was read using the wrong method.
+     */
+    WRONG_TYPE,
+    /**
+     * Represents a result where the end of the file has been reached and the tiny file has successfully been read.
+     */
+    EOF_SUCCESS
 };
 
 /**
@@ -139,5 +195,25 @@ enum TinyElementType peek_forward(TinyCursor* cursor);
 unsigned int get_major_version(TinyCursor* cursor);
 
 unsigned int get_minor_version(TinyCursor* cursor);
+
+// Element read methods
+
+enum ReadElementResult skip_element(TinyCursor* cursor);
+
+enum ReadElementResult read_namespaces(TinyCursor* cursor, TinyNamespaces* namespaces);
+
+enum ReadElementResult read_property(TinyCursor* cursor, TinyProperty* property);
+
+enum ReadElementResult read_class_def(TinyCursor* cursor, TinyClassDef* class_);
+
+enum ReadElementResult read_method_def(TinyCursor* cursor, TinyMethodDef* method);
+
+enum ReadElementResult read_field_def(TinyCursor* cursor, TinyFieldDef* field);
+
+enum ReadElementResult read_method_parameter_def(TinyCursor* cursor, TinyMethodParameterDef* method_parameter);
+
+enum ReadElementResult read_local_variable_def(TinyCursor* cursor, TinyLocalVariableDef* local_variable);
+
+enum ReadElementResult read_comment(TinyCursor* cursor, TinyCommentDef* comment);
 
 #endif //C_TINY_PARSER_TINY_H
