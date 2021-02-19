@@ -19,6 +19,8 @@
 #ifndef C_TINY_PARSER_TINY_H
 #define C_TINY_PARSER_TINY_H
 
+#include <inttypes.h>
+
 /**
  * Represents a cursor used to read a tiny file.
  */
@@ -63,56 +65,6 @@ typedef struct TinyLocalVariableDef TinyLocalVariableDef;
  * A structure which contains a comment for an element in a tiny file.
  */
 typedef struct TinyCommentDef TinyCommentDef;
-
-/**
- * Represents the result of an action related to reading a tiny file.
- */
-enum TinyResult {
-    /**
-     * Represents a result where there were no issues while beginning to read a tiny file.
-     */
-    OK,
-    /**
-     * Represents an error where the cursor was a null pointer.
-     */
-    NULL_CURSOR,
-    /**
-     * Represents an error where the cursor is already reading a tiny file when the cursor is already reading a file.
-     */
-    ALREADY_READING,
-    /**
-     * Represents an error where the cursor is reading a file that is not a tiny file.
-     */
-    UNSUPPORTED_FILE,
-    /**
-     * Represents an error where the cursor is reading a malformed header in a tiny file.
-     */
-    INVALID_HEADER,
-    /**
-     * Represents an error where the cursor has encountered a version of the tiny file specification it cannot read.
-     * The major and minor version of the tiny file may be read still if this error is thrown.
-     */
-    UNSUPPORTED_VERSION
-};
-
-/**
- * Represents the result of reading an element from a tiny file.
- */
-enum ReadElementResult {
-    /**
-     * Represents a result where the element being read was successfully read.
-     */
-    READ_SUCCESS,
-    /**
-     * Represents an error where the element being read was the wrong type.
-     * This occurs when the element was read using the wrong method.
-     */
-    WRONG_TYPE,
-    /**
-     * Represents a result where the end of the file has been reached and the tiny file has successfully been read.
-     */
-    EOF_SUCCESS
-};
 
 /**
  * Represents a type of element which may be found in a tiny file.
@@ -175,17 +127,16 @@ enum TinyElementType {
  * Creates a cursor used to read a tiny file
  * @return a new cursor
  */
-struct TinyCursor* create_cursor();
+TinyCursor* create_cursor(char* input);
 
 /**
  * Starts reading a tiny file from the input.
  *
  * @param cursor a pointer representing the cursor used to track where the tiny file is being read from.
  * @param input the file to read from
- * @return a result detailing whether the file was successfully read or why the file could not be read.
- * If the cursor result is not OK then the
+ * @return true if the file has started to been read, or else false
  */
-enum TinyResult begin_read(TinyCursor* cursor, char* input);
+bool begin_read(TinyCursor* cursor, char* input);
 
 /**
  * Gets the major version of a tiny file being read.
@@ -193,7 +144,7 @@ enum TinyResult begin_read(TinyCursor* cursor, char* input);
  * @param cursor the cursor reading the file
  * @return the major version of the tiny file
  */
-unsigned int get_major_version(TinyCursor* cursor);
+uint32_t get_major_version(TinyCursor* cursor);
 
 /**
  * Gets the minor version of a tiny file being read.
@@ -201,7 +152,7 @@ unsigned int get_major_version(TinyCursor* cursor);
  * @param cursor the cursor reading the file
  * @return the minor version of the tiny file
  */
-unsigned int get_minor_version(TinyCursor* cursor);
+uint32_t get_minor_version(TinyCursor* cursor);
 
 // Element reading methods
 
